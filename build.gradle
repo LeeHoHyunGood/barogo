@@ -1,0 +1,81 @@
+buildscript {
+    ext {
+        스프링부트_버전 = '2.7.2'
+        쿼리DSL_버전 = '5.0.0'
+    }
+}
+
+
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'java'
+}
+
+group = 'com.barogo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //================= 스프링 ================
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: 스프링부트_버전
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: 스프링부트_버전
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: 스프링부트_버전
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: 스프링부트_버전
+
+    //================ QDSL 설정 ==============
+    implementation "com.querydsl:querydsl-jpa:${쿼리DSL_버전}"
+    implementation "com.querydsl:querydsl-apt:${쿼리DSL_버전}"
+
+    //================= 룸북 ================
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //================= DB연결 ================
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.4.2'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.30'
+
+    //================= 테스트 ================
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.springframework.security:spring-security-test'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    //JWT
+    implementation 'com.auth0:java-jwt:3.10.3'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
