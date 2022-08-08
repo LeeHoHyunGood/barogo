@@ -22,7 +22,7 @@ public class ApiSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() // 시큐리티에서 세선 관리 x jwt 쓸거고 헤더에 token 방식으로 할거라  ㄴㄴ
                 .authorizeRequests()
                 .antMatchers("/api/common/**").permitAll()
-                .antMatchers("/api/member/join/**").permitAll()
+                .antMatchers("/api/member/join/**").anonymous()
                 .antMatchers("/**").hasRole("USER")
                 .anyRequest().permitAll()
                 .and()

@@ -16,7 +16,7 @@ public class Member implements Serializable {
 
     @Id
     @Column(nullable = false)
-    private Long memberId;
+    private String memberId;
 
     @Column(nullable = false, length = 10)
     private String memberName;
@@ -24,9 +24,10 @@ public class Member implements Serializable {
     @Column(length = 1000)
     private String pwd;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false, length = 20)
-//    private RoleGroup roleGroup;
+    @Column(nullable = false, length = 20)
+    private String role;
 
+    @Transient
+    private Set<GrantedAuthority> authorities;
 
 }

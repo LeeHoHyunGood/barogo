@@ -1,30 +1,30 @@
 package com.barogo.api.config.secuirity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 /**
  * jwt 인증 필터
  *  */
-//@Data
-//@EqualsAndHashCode(callSuper=false)
-//public class ApiAuthFilter extends OncePerRequestFilter {
-//
-//    private final JwtTokenProvider jwtTokenProvider;
-//
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
-//
-//        GuideResult result = new GuideResult();
-//        ServletRequestDataBinder binder = new ServletRequestDataBinder(result);
-//        binder.setValidator(validator);
-//        binder.setConversionService(conversionService);
-//        binder.bind(req);
-//        binder.validate();
-//
-//        MetadataHolder.CURRENT_STEP_MEMBER_ID.set(req.getHeader("reqMemberId"));
-//        MetadataHolder.CURRENT_STEP_ADV_ID.set(req.getHeader("advId"));
-//        MetadataHolder.CURRENT_STEP_VENDOR_ID.set(req.getHeader("vendorId"));
-//
-//        chain.doFilter(req, resp);
-//    }
-//
-//
-//}
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class ApiAuthFilter extends GenericFilterBean {
+
+    private final AuthTokenProvider authTokenProvider;
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String token = ((HttpServletRequest) request).getHeader("AccessToken");
+        if(token != null) {
+            String memberId = authTokenProvider.valiToken(token);
+        }
+    }
+}
