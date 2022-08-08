@@ -25,6 +25,7 @@ public class AuthTokenProvider {
         algorithmHS = Algorithm.HMAC256(Base64.getEncoder().encodeToString(secretKey.getBytes()));
     }
 
+
     public String valiToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(algorithmHS)

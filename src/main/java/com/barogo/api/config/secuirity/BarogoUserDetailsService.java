@@ -16,7 +16,6 @@ public class BarogoUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException("존재 하지 않는 사용자 입니다."));
-        return (UserDetails) memberRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException("존재 하지 않는 사용자 입니다."));
+        return AuthVo.of(memberRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException("존재 하지 않는 사용자 입니다.")));
     }
 }

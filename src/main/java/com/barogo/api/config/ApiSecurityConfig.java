@@ -27,7 +27,7 @@ public class ApiSecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin().disable()
-                .addFilterBefore()
+//                .addFilterBefore()
                 .build();
     }
 
